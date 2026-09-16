@@ -1,48 +1,75 @@
-import mne
+import mne #MNE documentation: https://mne.tools/stable/auto_tutorials/raw/10_raw_overview.html#extracting-data-from-raw-objects
 import os
-
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
 
-##From MNE documentation: https://mne.tools/stable/auto_tutorials/raw/10_raw_overview.html#extracting-data-from-raw-objects
-raw = mne.io.read_raw_brainvision('eeg_formatting/sample_data/Control1129.vhdr', preload=True)
-'''
-n_time_samps = raw.n_times
-time_secs = raw.times
-ch_names = raw.ch_names
-n_chan = len(ch_names)  # note: there is no raw.n_channels attribute
-print(
-    f"the (cropped) sample data object has {n_time_samps} time samples and "
-    f"{n_chan} channels."
-)
-print(f"The last time sample is at {time_secs[-1]} seconds.")
-print("The first few channel names are {}.".format(", ".join(ch_names[:3])))
-print()  # insert a blank line in the output
+def check_extension(file_path, output_dir, name):
+    #checks the file extension and calls the appropriate reading function
+    _, ext = os.path.splitext(file_path)
+    if ext == ".vhdr":
+        return read_vhdr_to_csv(file_path, output_dir, name)
+    elif ext == ".edf":
+        return read_edf_to_csv(file_path, output_dir, name)
+    else:
+        raise ValueError("Unsupported file format")
 
-# some examples of raw.info:
-print("bad channels:", raw.info["bads"])  # chs marked "bad" during acquisition
-print(raw.info["sfreq"], "Hz")  # sampling frequency
-print(raw.info["description"], "\n")  # miscellaneous acquisition info
+def read_vhdr_to_csv(vhdr_file_path, output_dir, name):
+    #from mne docs, reads the raw data with vhdr file path and preloads it into memory
+    raw = mne.io.read_raw_brainvision(vhdr_file_path, preload=True)
+    
+    sampling_freq = raw.info["sfreq"]
+    #just taking a small window of data for testing
+    start_stop_seconds = np.array([11, 13])
+    start_sample, stop_sample = (start_stop_seconds * sampling_freq).astype(int)
+    
+    #channel names are stored in the raw.info dictionary under the key "ch_names"
+    channel_names = raw.info["ch_names"]
 
-print(raw.info)
-'''
+    output_csv = os.path.join(output_dir, f"{name}.csv") #name for csv
+    
+    #writing csv
+    with open(output_csv, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(["window_id", "channel index", "channel name", "sample index", "value (uv)"]) #initial headers
+        #looping through each channel and sample to write the data to the csv
+        for channel_index, channel_name in enumerate(channel_names):
+            for sample_index in range(start_sample, stop_sample):
+                value = raw.get_data(picks=channel_index, start=sample_index, stop=sample_index + 1)[0, 0]
+                writer.writerow([f"{name}", channel_index, channel_name, sample_index, value*1000000])
+    print(f"CSV written to {output_csv}") #success message
 
-sampling_freq = raw.info["sfreq"]
-start_stop_seconds = np.array([11, 13])
-start_sample, stop_sample = (start_stop_seconds * sampling_freq).astype(int)
+def read_edf_to_csv(edf_file_path, output_dir, name):
+    #from mne docs, reads the raw data with edf file path and preloads it into memory
+    raw = mne.io.read_raw_edf(edf_file_path, preload=True)
+    
+    sampling_freq = raw.info["sfreq"]
+    #just taking a small window of data for testing
+    start_stop_seconds = np.array([11, 13])
+    start_sample, stop_sample = (start_stop_seconds * sampling_freq).astype(int)
+    
+    #channel names are stored in the raw.info dictionary under the key "ch_names"
+    channel_names = raw.info["ch_names"]
 
-channel_names = raw.info["ch_names"]
+    output_csv = os.path.join(output_dir, f"{name}.csv") #name for csv
+    
+    #writing csv
+    with open(output_csv, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(["window_id", "channel index", "channel name", "sample index", "value (uv)"]) #initial headers
+        #looping through each channel and sample to write the data to the csv
+        for channel_index, channel_name in enumerate(channel_names):
+            for sample_index in range(start_sample, stop_sample):
+                value = raw.get_data(picks=channel_index, start=sample_index, stop=sample_index + 1)[0, 0]
+                writer.writerow([f"{name}", channel_index, channel_name, sample_index, value*1000000])
+    print(f"CSV written to {output_csv}") #success message
+def main() -> None:
+    #example usage of the functions
+    file_path = "sample_data/Control1129.vhdr" #path to vhdr file
+    output_dir = "processed_data" #output directory for the csv
+    name = file_path.split("/")[-1].split(".")[0]  #extracts the name from the file path
 
-name = "Control1129"
-output_dir = "eeg_formatting/processed_data"
-output_csv = os.path.join(output_dir, f"{name}.csv")
-with open(output_csv, 'w', newline='', encoding='utf-8') as csvfile:
-    writer = csv.writer(csvfile)
-    writer.writerow(["window_id", "channel index", "channel name", "sample index", "value (uv)"])
-    for channel_index, channel_name in enumerate(channel_names):
-        for sample_index in range(start_sample, stop_sample):
-            value = raw.get_data(picks=channel_index, start=sample_index, stop=sample_index + 1)[0, 0]
-            writer.writerow([f"{name}", channel_index, channel_name, sample_index, value])
-print(f"CSV written to {output_csv}")
-##SUCCESS!! will make functions for diff formats next and also check if uv is valid bc very small values
+    check_extension(file_path, output_dir, name) #calls the function to read the file and write to csv
+
+if __name__ == "__main__":
+    main()
