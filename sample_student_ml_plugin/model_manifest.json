@@ -1,0 +1,12 @@
+{
+  "model_name": "frozen_linear_eeg_qc",
+  "model_version": "frozen_linear_eeg_qc_v1",
+  "model_family": "embedded_multiclass_linear_classifier",
+  "artifact_location": "student_ml_plugin/plugin.py",
+  "feature_manifest": "feature_manifest.json",
+  "status_labels": ["KEEP", "WARN", "REJECT"],
+  "reason_labels": ["AMP_RANGE", "FLATLINE"],
+  "decision_temperature": 1.0,
+  "reason_probability_cutoff": 0.5,
+  "notes": "Passing-line model weights are embedded directly in plugin.py; no external model file is required."
+}

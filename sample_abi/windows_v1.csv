@@ -1,0 +1,4 @@
+abi_version,run_id,session_id,subject_id,window_id,window_index,start_sec,duration_sec,sample_rate_hz,start_sample,end_sample,eeg_channel_count,sample_count,eog_channel_count
+eeg_qc_bash_csv_abi_v1,run_sample,session_a,subject_01,w_clean,0,0.0,2.0,128.0,0,4,2,4,0
+eeg_qc_bash_csv_abi_v1,run_sample,session_a,subject_01,w_noisy,1,2.0,2.0,128.0,4,8,1,4,0
+eeg_qc_bash_csv_abi_v1,run_sample,session_a,subject_01,w_flat,2,4.0,2.0,128.0,8,12,2,4,0
