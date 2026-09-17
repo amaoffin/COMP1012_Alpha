@@ -63,6 +63,7 @@ def read_edf_to_csv(edf_file_path, output_dir, name):
                 value = raw.get_data(picks=channel_index, start=sample_index, stop=sample_index + 1)[0, 0]
                 writer.writerow([f"{name}", channel_index, channel_name, sample_index, value*1000000])
     print(f"CSV written to {output_csv}") #success message
+
 def main() -> None:
     #example usage of the functions
     file_path = "sample_data/Control1129.vhdr" #path to vhdr file

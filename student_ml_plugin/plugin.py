@@ -1,5 +1,6 @@
 #taken from sample for now, annotating to find features
 
+#notes: need to normalize data before processing, maybe check for flatline before running model?
 from __future__ import annotations
 
 import math
@@ -88,7 +89,7 @@ def _summary(window: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, 
 
     flatline_eps = _float_param(params, "flatline_range_epsilon", 1e-6)
     flat_channels = sum(1 for value in ranges if value <= flatline_eps)
-    flatline_ratio = flat_channels / non_empty_channels if non_empty_channels else 1.0
+    flatline_ratio = flat_channels / non_empty_channels if non_empty_channels else 1.0 #flatline ratio is the ratio of flat channels to non-empty channels, if there are no non-empty channels, the ratio is set to 1.0
     range_max = max(ranges) if ranges else 0.0
     range_mean = sum(ranges) / len(ranges) if ranges else 0.0
 
