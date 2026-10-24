@@ -72,5 +72,6 @@ def main() -> None:
 
     check_extension(file_path, output_dir, name) #calls the function to read the file and write to csv
 
+#in hindsight i dont think i'll use this... guess maybe can run it for real life data test?
 if __name__ == "__main__":
     main()
