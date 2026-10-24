@@ -153,6 +153,7 @@ def _model_features(summary: Mapping[str, float]) -> tuple[float, ...]:
         math.log1p(peak_abs_uv) / 6.0,
     )
 
+#predicts the status of the window based on the summary and params, returns a tuple of status and confidence
 def _predict_status(summary: Mapping[str, float], params: Mapping[str, Any]) -> tuple[str, float]:
     features = _model_features(summary)
     scores = {label: _dot(MODEL_WEIGHTS[label], features) for label in LABELS}
@@ -161,6 +162,7 @@ def _predict_status(summary: Mapping[str, float], params: Mapping[str, Any]) -> 
     label = max(LABELS, key=lambda item: probabilities[item])
     return label, probabilities[label]
 
+#predicts the reasons for the status based on the summary and params, returns a list of reason codes
 def _predict_reasons(
     summary: Mapping[str, float], params: Mapping[str, Any], status: str
 ) -> list[str]:
@@ -181,7 +183,7 @@ def _predict_reasons(
         return reasons
     return [max(scored_reasons)[1]]
 
-
+#makes the qc decision based on the window and params, returns a dictionary with status, quality score, and reason codes
 def qc_decision_v1(
     window: Mapping[str, Any], params: Mapping[str, Any]
 ) -> Mapping[str, Any]:
@@ -203,6 +205,7 @@ def qc_decision_v1(
         "reason_codes": reasons,
     }
 
+#extracts features from the window and params, returns a dictionary with feature values and model gates
 def feature_extractor_v1(
     window: Mapping[str, Any], params: Mapping[str, Any]
 ) -> Mapping[str, float]:

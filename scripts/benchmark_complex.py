@@ -40,6 +40,7 @@ def run_unit_tests() -> int:
 
 def run_sample_validation(params: dict[str, str]) -> int:
     print("Running sample ABI regression check...")
+    #SO THIS IS WHERE WINDOWS_V1 IS USED
     sample_windows = ROOT / "sample_abi" / "windows_v1.csv"
     sample_eeg = ROOT / "sample_abi" / "eeg_samples_v1.csv"
     sample_eog = ROOT / "sample_abi" / "eog_samples_v1.csv"

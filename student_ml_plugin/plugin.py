@@ -19,6 +19,7 @@ MODEL_WEIGHTS: dict[str, tuple[float, ...]] = {
     "REJECT": (-2.25, 1.40, 5.40, 1.20, 5.70, 0.75, 0.60),
 }
 
+#reason weights for the model, used to determine the reasons for the predicted status
 REASON_WEIGHTS: dict[str, tuple[float, ...]] = {
     #amplitude range
     "AMP_RANGE": (-1.15, 4.40, 5.10, -1.25, -1.10, 0.60, 0.90),
@@ -26,14 +27,15 @@ REASON_WEIGHTS: dict[str, tuple[float, ...]] = {
     "FLATLINE": (-1.20, -1.35, -1.20, 4.80, 5.25, -0.35, -0.25),
 }
 
-
+#just float param function that gets a float parameter from the params dictionary, with a defalt value if not found, raises ValueError if the parameter is not valid float
 def _float_param(params: Mapping[str, Any], name: str, default: float) -> float:
     try:
         return float(params.get(name, default))
     except (TypeError, ValueError) as exc:
         raise ValueError(f"invalid numeric parameter: {name}") from exc
 
-
+#just a function that gets the channels from the window, checks if they are valid, and returns a list of channels, raises ValueError if the channels are not valid
+#window is from eeg_samples_v1.csv
 def _channels(window: Mapping[str, Any]) -> list[list[float]]:
     raw = window.get("eeg_samples", [])
     if not isinstance(raw, list):
@@ -58,7 +60,7 @@ def _range(channel: list[float]) -> float:
         return 0.0
     return max(channel) - min(channel)
 
-
+#sigmoid function that computes the sigmoid of a value, used for normalizing features
 def _sigmoid(value: float) -> float:
     if value >= 0:
         z = math.exp(-value)
@@ -66,7 +68,7 @@ def _sigmoid(value: float) -> float:
     z = math.exp(value)
     return z / (1.0 + z)
 
-
+#dot product function that computes the dot product of weights and values, used for computing scores for the model
 def _dot(weights: tuple[float, ...], values: tuple[float, ...]) -> float:
     return weights[0] + sum(weight * value for weight, value in zip(weights[1:], values))
 
@@ -118,7 +120,7 @@ def _summary(window: Mapping[str, Any], params: Mapping[str, Any]) -> dict[str, 
     zero_crossing_rate = (
         zero_crossings / zero_crossing_possible if zero_crossing_possible else 0.0
     )
-
+    #returns a dictionary of summary features for the EEG win
     return {
         "channel_count": float(len(channels)),
         "non_empty_channel_count": float(non_empty_channels),
@@ -177,7 +179,7 @@ def _predict_reasons(
         return reasons
     return [max(scored_reasons)[1]]
 
-
+#QC decision function that takes an EEG window and parameters, returning a dictionary with the predicted status, quality score, and reason codes
 def qc_decision_v1(
     window: Mapping[str, Any], params: Mapping[str, Any]
 ) -> Mapping[str, Any]:
