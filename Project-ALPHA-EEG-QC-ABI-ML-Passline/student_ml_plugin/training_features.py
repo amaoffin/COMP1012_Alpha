@@ -38,6 +38,8 @@ def extract_features(csv_path) -> dict:
     #mean absolute value and root mean square (RMS) are calculated across all channels
     features['mean_abs_uv'] = np.mean(np.abs(window.values))
     features['rms_uv'] = np.sqrt(np.mean(window.values ** 2))
+    #peak absolute value is calculated as the maximum absolute value across all channels
+    features['peak_abs_uv'] = np.max(np.abs(window.values))
     #peak-to-peak amplitude for each channel
     features['peak_to_peak_uv'] = window.max().max() - window.min().min()
     #line length for each channel (the sum of the absolute differences between consecutive samples)

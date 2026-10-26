@@ -3,15 +3,15 @@ import numpy as np
 import os
 import csv
 
-eeg_data = np.load('eeg_formatting/eegdenoisenet/EEG_all_epochs.npy')
-eog_data = np.load('eeg_formatting/eegdenoisenet/EOG_all_epochs.npy')
-emg_data = np.load('eeg_formatting/eegdenoisenet/EMG_all_epochs.npy')
+eeg_data = np.load('Project-ALPHA-EEG-QC-ABI-ML-Passline/eeg_formatting/eegdenoisenet/EEG_all_epochs.npy')
+eog_data = np.load('Project-ALPHA-EEG-QC-ABI-ML-Passline/eeg_formatting/eegdenoisenet/EOG_all_epochs.npy')
+emg_data = np.load('Project-ALPHA-EEG-QC-ABI-ML-Passline/eeg_formatting/eegdenoisenet/EMG_all_epochs.npy')
 Fs = 256
 x = 0
-data_no = 100
+data_no = 500
 epoch_length = 512
 rng = np.random.default_rng()
-output_dir = 'eeg_formatting/eegdenoisenet/train'
+output_dir = 'Project-ALPHA-EEG-QC-ABI-ML-Passline/eeg_formatting/eegdenoisenet/train'
 #normal eeg channel names
 channels = ["Fp1", "Fp2", "F7", "F3", "Fz", "F4", "F8", "C3", "Cz", "C4", "T7", "T8", "P7", "P8", "P3", "Pz", "P4", "O1", "O2"]
 #dict with split ratios for train, validation, and test sets
@@ -38,7 +38,7 @@ def mix_artifact(clean, artifact, snr_db):
     return clean + scaled_artifact
 
 #make clean and artifact-contaminated EEG windows for training
-#0 - clean; 1 - synthetic EOG contamination; 2 - synthetic EMG contamination
+#0 - clean; 1 - synthetic EOG contamination; 2 - synthetic EMG contamination; 3 - flatline
 def make_training_dataset():
     source_data = {
         "EEG": eeg_data,
@@ -95,8 +95,8 @@ def make_training_dataset():
         for splitting in split_names:
             count = split_counts[splitting]
 
-            #balance
-            labels = np.arange(count) % 3
+            #balance the labels across clean, EOG, EMG, and flatline (basically 0, 1, 2, 3)
+            labels = np.arange(count) % 4
             rng.shuffle(labels)
 
             eeg_pool = source_indices["EEG"][splitting]
@@ -133,6 +133,21 @@ def make_training_dataset():
 
                     artifact = emg_data[artifact_idx]
                     window = mix_artifact(clean, artifact, snr_db)
+                
+                #flatline ish
+                elif label == 3:
+                    artifact_type = "flatline"
+                    artifact_idx = ""
+                    snr_db = ""
+                    
+                    #chooses a random start point and length for the flatline segment, which is between 0.5 and 2 seconds long (Fs is 256 Hz, so Fs//2 is 0.5 seconds and Fs*2 is 2 seconds)
+                    #then replaces that segment of the clean EEG with zeros to simulate a flatline
+                    #not sure if this is the best way to simulate a flatline, but it should be good enough for training the model i hope
+                    start = rng.integers(0, len(clean) - Fs // 2)
+                    length = rng.integers(Fs // 2, Fs * 2)
+                    window = clean.copy()
+                    window[start:min(start + length, len(clean))] = 0
+                    
 
                 #save 'multichannel' window to CSV, multichannela
                 output_csv = os.path.join(output_dir, f"{window_id}.csv")
@@ -145,7 +160,7 @@ def make_training_dataset():
                         for sample_idx, value in enumerate(window):
                             writer.writerow([window_id, channel_idx,channel_name, sample_idx, float(value)])
 
-                # Save ground-truth metadata
+                #save ground-truth metadata
                 metadata_writer.writerow([window_id, int(label), artifact_type, snr_db, eeg_idx, artifact_idx, splitting])
     print("done")
 
