@@ -1,0 +1,35 @@
+{
+  "interpretable_features": [
+    "channel_count",
+    "non_empty_channel_count",
+    "sample_count_total",
+    "range_max_uv",
+    "range_mean_uv",
+    "flatline_ratio",
+    "mean_abs_uv",
+    "rms_uv",
+    "peak_abs_uv",
+    "peak_to_peak_uv",
+    "line_length_uv",
+    "zero_crossing_rate",
+    "kurtosis",
+    "skewness",
+    "std_uv"
+  ],
+  "model_features": [
+    "ml_range_gate",
+    "ml_range_reject_gate",
+    "ml_flatline_gate",
+    "ml_flatline_reject_gate",
+    "ml_rms_gate",
+    "ml_peak_gate"
+  ],
+  "model_feature_order": [
+    "range_gate",
+    "range_reject_gate",
+    "flat_gate",
+    "flat_reject_gate",
+    "rms_gate",
+    "peak_gate"
+  ]
+}
