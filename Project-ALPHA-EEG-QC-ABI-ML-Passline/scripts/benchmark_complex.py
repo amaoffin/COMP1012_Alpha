@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PLUGIN = ROOT / "student_ml_plugin" / "plugin.py"
+PLUGIN = ROOT / "student_ml_plugin" / "plugin_test.py"
 ABI_RUNTIME = ROOT / "abi_runtime" / "eeg_qc_abi.py"
 PARAMS_PATH = ROOT / "student_ml_plugin" / "params.json"
 
