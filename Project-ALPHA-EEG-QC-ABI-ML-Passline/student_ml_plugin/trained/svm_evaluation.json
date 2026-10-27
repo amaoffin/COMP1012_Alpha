@@ -1,0 +1,29 @@
+{
+  "model": "svm",
+  "model_family": "SVC",
+  "model_version": "frozen_linear_eeg_qc_v1",
+  "feature_manifest": "Project-ALPHA-EEG-QC-ABI-ML-Passline\\student_ml_plugin\\feature_manifest.json",
+  "model_manifest": "Project-ALPHA-EEG-QC-ABI-ML-Passline\\student_ml_plugin\\model_manifest.json",
+  "params": "Project-ALPHA-EEG-QC-ABI-ML-Passline\\student_ml_plugin\\params.json",
+  "features": [
+    "channel_count",
+    "non_empty_channel_count",
+    "sample_count_total",
+    "range_max_uv",
+    "range_mean_uv",
+    "flatline_ratio",
+    "mean_abs_uv",
+    "rms_uv",
+    "peak_abs_uv",
+    "peak_to_peak_uv",
+    "line_length_uv",
+    "zero_crossing_rate",
+    "kurtosis",
+    "skewness",
+    "std_uv"
+  ],
+  "label_mapping": {
+    "0": "clean",
+    "1": "artifact (EOG or EMG or flatline)"
+  }
+}

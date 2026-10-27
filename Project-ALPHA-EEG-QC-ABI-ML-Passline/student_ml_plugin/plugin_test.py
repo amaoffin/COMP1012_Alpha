@@ -1,4 +1,5 @@
 #integrated random forest; thinking of adding SVM - wont hit full integration benchmark accuracy :(
+#consider trimodal approach
 from pathlib import Path
 from typing import Any, Mapping
 

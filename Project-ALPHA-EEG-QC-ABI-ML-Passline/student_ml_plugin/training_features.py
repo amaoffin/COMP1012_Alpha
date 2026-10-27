@@ -26,15 +26,29 @@ def extract_features(csv_path) -> dict:
     #channel count
     features['channel_count'] = window.shape[1]
     #non-empty channel count (channels with at least one non-NaN value)
-    features['non_empty_channel_count'] = window.dropna(axis=1).shape[1]
+    non_empty_channels = window.notna().any().sum()
+    features["non_empty_channel_count"] = non_empty_channels
     #total sample count (# of rows * # of columns)
     features['sample_count_total'] = window.shape[0] * window.shape[1]
     #range max and mean
-    features['range_max_uv'] = window.max().max() - window.min().min()
-    #range mean is calculated as the mean of the max values of each channel minus the mean of the min values of each channel
-    features['range_mean_uv'] = window.max().mean() - window.min().mean()
-    #flatline ratio is calculated as the number of channels with only one unique value divided by the total number of channels
-    features['flatline_ratio'] = (window.nunique() == 1).sum() / window.shape[1]
+    ranges = window.max() - window.min()
+    features["range_max_uv"] = ranges.max() if not ranges.empty else 0.0
+    features["range_mean_uv"] = ranges.mean() if not ranges.empty else 0.0
+    #range based flatline doesnt work need to check consec samples if theyre same
+    flatline_eps = 1e-6
+    min_flatline_samples = 4
+    flat_channels = 0
+
+    for col in window.columns:
+        values = window[col].dropna()
+        unchanged = values.diff().abs() <= flatline_eps
+
+        #detects consec unchanged samples
+        groups = (~unchanged).cumsum()
+        if unchanged.groupby(groups).sum().max() >= min_flatline_samples - 1:
+            flat_channels += 1
+
+    features["flatline_ratio"] = (flat_channels / non_empty_channels if non_empty_channels else 1.0)
     #mean absolute value and root mean square (RMS) are calculated across all channels
     features['mean_abs_uv'] = np.mean(np.abs(window.values))
     features['rms_uv'] = np.sqrt(np.mean(window.values ** 2))
@@ -62,10 +76,10 @@ def features_to_csv(features: dict, csv_path: str):
 
 def main():
     #example usage
-    csv_path = 'Project-ALPHA-EEG-QC-ABI-ML-Passline/eeg_formatting/eegdenoisenet/train/window_000000.csv'
+    csv_path = 'eeg_formatting/eegdenoisenet/train/window_000000.csv'
     features = extract_features(csv_path)
-    data_dir = Path("Project-ALPHA-EEG-QC-ABI-ML-Passline/eeg_formatting/eegdenoisenet/train")
-    metadata_path = Path("Project-ALPHA-EEG-QC-ABI-ML-Passline/eeg_formatting/eegdenoisenet/train/metadata.csv")
+    data_dir = Path("eeg_formatting/eegdenoisenet/train")
+    metadata_path = Path("eeg_formatting/eegdenoisenet/train/metadata.csv")
     metadata = pd.read_csv(metadata_path)
     rows = []
     for record in metadata.to_dict(orient="records"):
@@ -84,7 +98,7 @@ def main():
             row["artifact_type"] = record["artifact_type"]
         row.update({name: all_features[name] for name in features})
         rows.append(row)
-    out = Path("Project-ALPHA-EEG-QC-ABI-ML-Passline/student_ml_plugin/features.csv")
+    out = Path("student_ml_plugin/features.csv")
     out.parent.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(rows).to_csv(out, index=False)
     print(f"extracted features for {len(rows)} windows")

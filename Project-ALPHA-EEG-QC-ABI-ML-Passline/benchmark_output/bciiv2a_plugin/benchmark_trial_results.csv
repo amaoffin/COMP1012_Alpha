@@ -1,0 +1,13 @@
+subject_id,session_id,run_index,trial_number,class_name,expert_artifact,expert_recommended_status,window_count,adaptive_statuses,fixed_statuses,adaptive_warn_or_reject,adaptive_reject_only,fixed_any_channel_threshold,pipeline_recommended_status,expert_pipeline_agree
+a01,a01_run04_trial001,4,1,tongue,0,ACCEPT,3,WARN;KEEP;KEEP,WARN;KEEP;KEEP,1,0,0,FLAG,0
+a01,a01_run04_trial002,4,2,feet,0,ACCEPT,3,KEEP;KEEP;KEEP,KEEP;KEEP;KEEP,0,0,0,ACCEPT,1
+a01,a01_run04_trial003,4,3,right_hand,0,ACCEPT,3,KEEP;KEEP;KEEP,KEEP;KEEP;KEEP,0,0,0,ACCEPT,1
+a01,a01_run04_trial004,4,4,left_hand,0,ACCEPT,3,KEEP;KEEP;KEEP,KEEP;KEEP;KEEP,0,0,0,ACCEPT,1
+a01,a01_run04_trial005,4,5,left_hand,0,ACCEPT,3,KEEP;KEEP;KEEP,KEEP;KEEP;KEEP,0,0,0,ACCEPT,1
+a01,a01_run04_trial006,4,6,right_hand,0,ACCEPT,3,KEEP;KEEP;KEEP,KEEP;KEEP;KEEP,0,0,0,ACCEPT,1
+a01,a01_run04_trial007,4,7,feet,0,ACCEPT,3,KEEP;KEEP;KEEP,KEEP;KEEP;KEEP,0,0,0,ACCEPT,1
+a01,a01_run04_trial008,4,8,tongue,0,ACCEPT,3,KEEP;KEEP;KEEP,KEEP;KEEP;KEEP,0,0,0,ACCEPT,1
+a01,a01_run04_trial009,4,9,right_hand,0,ACCEPT,3,KEEP;KEEP;KEEP,KEEP;KEEP;KEEP,0,0,0,ACCEPT,1
+a01,a01_run04_trial010,4,10,feet,0,ACCEPT,3,KEEP;KEEP;KEEP,KEEP;KEEP;KEEP,0,0,0,ACCEPT,1
+a01,a01_run04_trial011,4,11,left_hand,0,ACCEPT,3,KEEP;WARN;KEEP,KEEP;WARN;KEEP,1,0,0,FLAG,0
+a01,a01_run04_trial012,4,12,left_hand,0,ACCEPT,3,KEEP;KEEP;KEEP,KEEP;KEEP;KEEP,0,0,0,ACCEPT,1

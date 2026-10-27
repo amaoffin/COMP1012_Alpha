@@ -3,21 +3,21 @@ import numpy as np
 import os
 import csv
 
-eeg_data = np.load('Project-ALPHA-EEG-QC-ABI-ML-Passline/eeg_formatting/eegdenoisenet/EEG_all_epochs.npy')
-eog_data = np.load('Project-ALPHA-EEG-QC-ABI-ML-Passline/eeg_formatting/eegdenoisenet/EOG_all_epochs.npy')
-emg_data = np.load('Project-ALPHA-EEG-QC-ABI-ML-Passline/eeg_formatting/eegdenoisenet/EMG_all_epochs.npy')
+eeg_data = np.load('eeg_formatting/eegdenoisenet/EEG_all_epochs.npy')
+eog_data = np.load('eeg_formatting/eegdenoisenet/EOG_all_epochs.npy')
+emg_data = np.load('eeg_formatting/eegdenoisenet/EMG_all_epochs.npy')
 Fs = 256
 x = 0
 data_no = 500
 epoch_length = 512
 rng = np.random.default_rng()
-output_dir = 'Project-ALPHA-EEG-QC-ABI-ML-Passline/eeg_formatting/eegdenoisenet/train'
+output_dir = 'eeg_formatting/eegdenoisenet/train'
 #normal eeg channel names
 channels = ["Fp1", "Fp2", "F7", "F3", "Fz", "F4", "F8", "C3", "Cz", "C4", "T7", "T8", "P7", "P8", "P3", "Pz", "P4", "O1", "O2"]
 #dict with split ratios for train, validation, and test sets
 split = {"train": 0.70, "val": 0.15,"test": 0.15}
 #snr levels (dB) for adding artifacts to clean EEG, picks one to have diff contam levels
-snr = [-10, -5, 0, 5]
+snr = [-1, -0.5, 0, 0.5, 1]
 
 #addsan artifact to clean EEG at the specified SNR in dB
 def mix_artifact(clean, artifact, snr_db):
@@ -146,8 +146,7 @@ def make_training_dataset():
                     start = rng.integers(0, len(clean) - Fs // 2)
                     length = rng.integers(Fs // 2, Fs * 2)
                     window = clean.copy()
-                    window[start:min(start + length, len(clean))] = 0
-                    
+                    window[start:min(start + length, len(clean))] = rng.integers(-2,3)
 
                 #save 'multichannel' window to CSV, multichannela
                 output_csv = os.path.join(output_dir, f"{window_id}.csv")

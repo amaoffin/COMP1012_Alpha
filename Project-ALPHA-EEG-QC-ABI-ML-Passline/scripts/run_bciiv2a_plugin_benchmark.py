@@ -55,10 +55,10 @@ EEG_CHANNELS = [
 
 
 def _plugin_path() -> Path:
-    ml_plugin = PROJECT_ROOT / "student_ml_plugin" / "plugin.py"
+    ml_plugin = PROJECT_ROOT / "student_ml_plugin" / "plugin_test.py"
     if ml_plugin.exists():
         return ml_plugin
-    return PROJECT_ROOT / "student_non_ml_plugin" / "plugin.py"
+    return PROJECT_ROOT / "student_non_ml_plugin" / "plugin_test.py"
 
 
 def _params_path() -> Path:

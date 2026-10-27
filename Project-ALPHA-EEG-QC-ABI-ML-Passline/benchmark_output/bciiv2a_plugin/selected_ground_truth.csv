@@ -1,0 +1,13 @@
+dataset,subject_id,session_id,run_index,trial_number,class_id,class_name,expert_artifact,source_mat,source_trial_start_sample,segment_start_seconds_after_trial,segment_duration_seconds,sample_rate_hz,csv_file
+BCI Competition IV Dataset 2a,a01,a01_run04_trial001,4,1,4,tongue,0,A01T.mat,251,0.0,6.0,250,data/bciiv2a_csv/a01_run04_trial001_tongue.csv
+BCI Competition IV Dataset 2a,a01,a01_run04_trial002,4,2,3,feet,0,A01T.mat,2254,0.0,6.0,250,data/bciiv2a_csv/a01_run04_trial002_feet.csv
+BCI Competition IV Dataset 2a,a01,a01_run04_trial003,4,3,2,right_hand,0,A01T.mat,4172,0.0,6.0,250,data/bciiv2a_csv/a01_run04_trial003_right_hand.csv
+BCI Competition IV Dataset 2a,a01,a01_run04_trial004,4,4,1,left_hand,0,A01T.mat,6124,0.0,6.0,250,data/bciiv2a_csv/a01_run04_trial004_left_hand.csv
+BCI Competition IV Dataset 2a,a01,a01_run04_trial005,4,5,1,left_hand,0,A01T.mat,8132,0.0,6.0,250,data/bciiv2a_csv/a01_run04_trial005_left_hand.csv
+BCI Competition IV Dataset 2a,a01,a01_run04_trial006,4,6,2,right_hand,0,A01T.mat,10243,0.0,6.0,250,data/bciiv2a_csv/a01_run04_trial006_right_hand.csv
+BCI Competition IV Dataset 2a,a01,a01_run04_trial007,4,7,3,feet,0,A01T.mat,12160,0.0,6.0,250,data/bciiv2a_csv/a01_run04_trial007_feet.csv
+BCI Competition IV Dataset 2a,a01,a01_run04_trial008,4,8,4,tongue,0,A01T.mat,14210,0.0,6.0,250,data/bciiv2a_csv/a01_run04_trial008_tongue.csv
+BCI Competition IV Dataset 2a,a01,a01_run04_trial009,4,9,2,right_hand,0,A01T.mat,16141,0.0,6.0,250,data/bciiv2a_csv/a01_run04_trial009_right_hand.csv
+BCI Competition IV Dataset 2a,a01,a01_run04_trial010,4,10,3,feet,0,A01T.mat,18139,0.0,6.0,250,data/bciiv2a_csv/a01_run04_trial010_feet.csv
+BCI Competition IV Dataset 2a,a01,a01_run04_trial011,4,11,1,left_hand,0,A01T.mat,20045,0.0,6.0,250,data/bciiv2a_csv/a01_run04_trial011_left_hand.csv
+BCI Competition IV Dataset 2a,a01,a01_run04_trial012,4,12,1,left_hand,0,A01T.mat,21940,0.0,6.0,250,data/bciiv2a_csv/a01_run04_trial012_left_hand.csv

@@ -1,0 +1,3 @@
+decision_source,accept_trials,flag_or_reject_trials,total_trials
+expert_ground_truth,12,0,12
+adaptive_warn_or_reject,10,2,12

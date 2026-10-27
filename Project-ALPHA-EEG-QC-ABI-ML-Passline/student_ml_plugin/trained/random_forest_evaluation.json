@@ -2,9 +2,9 @@
   "model": "random_forest",
   "model_family": "RandomForestClassifier",
   "model_version": "frozen_linear_eeg_qc_v1",
-  "feature_manifest": "Project-ALPHA-EEG-QC-ABI-ML-Passline\\student_ml_plugin\\feature_manifest.json",
-  "model_manifest": "Project-ALPHA-EEG-QC-ABI-ML-Passline\\student_ml_plugin\\model_manifest.json",
-  "params": "Project-ALPHA-EEG-QC-ABI-ML-Passline\\student_ml_plugin\\params.json",
+  "feature_manifest": "student_ml_plugin\\feature_manifest.json",
+  "model_manifest": "student_ml_plugin\\model_manifest.json",
+  "params": "student_ml_plugin\\params.json",
   "features": [
     "channel_count",
     "non_empty_channel_count",
