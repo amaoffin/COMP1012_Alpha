@@ -1,7 +1,7 @@
 {
-  "model_name": "frozen_linear_eeg_qc",
-  "model_version": "frozen_linear_eeg_qc_v1",
-  "model_family": "embedded_multiclass_linear_classifier",
+  "model_name": "trimodel_eeg_qc",
+  "model_version": "trimodel_eeg_qc_v1",
+  "model_family": "TBA",
   "artifact_location": "student_ml_plugin/plugin.py",
   "feature_manifest": "feature_manifest.json",
   "status_labels": ["KEEP", "WARN", "REJECT"],
@@ -14,11 +14,6 @@
       "model_name": "random_forest",
       "model_family": "RandomForestClassifier",
       "artifact_filename": "random_forest.joblib"
-    },
-    "svm": {
-      "model_name": "svm",
-      "model_family": "SVC",
-      "artifact_filename": "svm.joblib"
     }
   }
 }

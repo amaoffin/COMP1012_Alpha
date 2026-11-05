@@ -1,0 +1,4 @@
+method,trials,artifact_trials,clean_trials,tp,fp,tn,fn,sensitivity,specificity,precision,f1,balanced_accuracy,accuracy
+adaptive_warn_or_reject,2592,264,2328,216,1862,466,48,0.818182,0.200172,0.103946,0.184458,0.509177,0.263117
+adaptive_reject_only,2592,264,2328,109,586,1742,155,0.412879,0.748282,0.156835,0.227320,0.580580,0.714120
+fixed_any_channel_threshold,2592,264,2328,109,586,1742,155,0.412879,0.748282,0.156835,0.227320,0.580580,0.714120

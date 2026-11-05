@@ -8,16 +8,16 @@ eog_data = np.load('eeg_formatting/eegdenoisenet/EOG_all_epochs.npy')
 emg_data = np.load('eeg_formatting/eegdenoisenet/EMG_all_epochs.npy')
 Fs = 256
 x = 0
-data_no = 500
+data_no = 1000
 epoch_length = 512
 rng = np.random.default_rng()
 output_dir = 'eeg_formatting/eegdenoisenet/train'
 #normal eeg channel names
 channels = ["Fp1", "Fp2", "F7", "F3", "Fz", "F4", "F8", "C3", "Cz", "C4", "T7", "T8", "P7", "P8", "P3", "Pz", "P4", "O1", "O2"]
 #dict with split ratios for train, validation, and test sets
-split = {"train": 0.70, "val": 0.15,"test": 0.15}
+split = {"train": 0.60, "val": 0.20,"test": 0.20}
 #snr levels (dB) for adding artifacts to clean EEG, picks one to have diff contam levels
-snr = [-1, -0.5, 0, 0.5, 1]
+snr = [-10, -5, -2.5, 2.5, 5, 10]
 
 #addsan artifact to clean EEG at the specified SNR in dB
 def mix_artifact(clean, artifact, snr_db):
@@ -110,7 +110,7 @@ def make_training_dataset():
 
                 #choose a clean EEG source from this split only
                 eeg_idx = int(rng.choice(eeg_pool))
-                clean = eeg_data[eeg_idx].astype(np.float64).copy()
+                clean = eeg_data[eeg_idx].astype(np.float64).copy()/10
 
                 artifact_type = "none"
                 artifact_idx = ""
@@ -123,7 +123,7 @@ def make_training_dataset():
                     snr_db = int(rng.choice(snr))
 
                     artifact = eog_data[artifact_idx]
-                    window = window = mix_artifact(clean, artifact, snr_db)
+                    window = mix_artifact(clean, artifact, snr_db)
 
                 #2 has emg contam
                 elif label == 2:
@@ -154,9 +154,10 @@ def make_training_dataset():
                 with open(output_csv, "w", newline="", encoding="utf-8") as csvfile:
                     writer = csv.writer(csvfile)
                     writer.writerow(["window_id", "channel_index", "channel_name", "sample_index", "value_uv"])
-
                     for channel_idx, channel_name in enumerate(channels):
-                        for sample_idx, value in enumerate(window):
+                        channel_modifier = rng.uniform(0.9, 1.1)
+                        channel_window = window * channel_modifier
+                        for sample_idx, value in enumerate(channel_window):
                             writer.writerow([window_id, channel_idx,channel_name, sample_idx, float(value)])
 
                 #save ground-truth metadata

@@ -1,4 +1,4 @@
-#1st model: RF
+#2nd model: RF
 import argparse
 import json
 import pandas as pd

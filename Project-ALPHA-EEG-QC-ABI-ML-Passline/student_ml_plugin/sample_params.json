@@ -1,0 +1,6 @@
+{
+  "model_version": "frozen_linear_eeg_qc_v1",
+  "decision_temperature": 1.0,
+  "reason_probability_cutoff": 0.5,
+  "flatline_range_epsilon": 0.000001
+}

@@ -16,7 +16,7 @@ dataset in this package is BCI Competition IV Dataset 2a:
 The ALPHA and BETA passline projects use this shared directory through:
 
 ```bash
-python3 scripts/run_bciiv2a_plugin_benchmark.py
+python scripts/run_bciiv2a_plugin_benchmark.py
 ```
 
 Use `--max-trials 12` for a quick smoke test, or omit it for the full benchmark.

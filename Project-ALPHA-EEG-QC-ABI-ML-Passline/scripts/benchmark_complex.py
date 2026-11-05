@@ -11,10 +11,10 @@ from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PLUGIN = ROOT / "student_ml_plugin" / "plugin.py"
+PLUGIN = ROOT / "student_ml_plugin" / "plugin_rf_frozen.py"
 ABI_RUNTIME = ROOT / "abi_runtime" / "eeg_qc_abi.py"
 PARAMS_PATH = ROOT / "student_ml_plugin" / "params.json"
-
+NAME="RF+FROZEN"
 sys.path.insert(0, str(PLUGIN.parent))
 import plugin  # noqa: E402
 
@@ -300,6 +300,7 @@ def run_integration_benchmark(
 
 
 def main() -> int:
+    print(NAME)
     print("Running Project Alpha EEG QC ML benchmark package...")
     if run_unit_tests() != 0:
         return 1
