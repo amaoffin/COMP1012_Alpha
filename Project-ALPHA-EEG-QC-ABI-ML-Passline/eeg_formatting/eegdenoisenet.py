@@ -8,16 +8,16 @@ eog_data = np.load('eeg_formatting/eegdenoisenet/EOG_all_epochs.npy')
 emg_data = np.load('eeg_formatting/eegdenoisenet/EMG_all_epochs.npy')
 Fs = 256
 x = 0
-data_no = 1000
+data_no = 2000
 epoch_length = 512
 rng = np.random.default_rng()
 output_dir = 'eeg_formatting/eegdenoisenet/train'
 #normal eeg channel names
 channels = ["Fp1", "Fp2", "F7", "F3", "Fz", "F4", "F8", "C3", "Cz", "C4", "T7", "T8", "P7", "P8", "P3", "Pz", "P4", "O1", "O2"]
 #dict with split ratios for train, validation, and test sets
-split = {"train": 0.60, "val": 0.20,"test": 0.20}
+split = {"train": 0.70, "val": 0.15,"test": 0.15}
 #snr levels (dB) for adding artifacts to clean EEG, picks one to have diff contam levels
-snr = [-10, -5, -2.5, 2.5, 5, 10]
+snr = [-5, -2.5, -1, -0.5, -0.25, 0.1, 0.1, 0.25, 0.5, 1, 2.5, 5]
 
 #addsan artifact to clean EEG at the specified SNR in dB
 def mix_artifact(clean, artifact, snr_db):

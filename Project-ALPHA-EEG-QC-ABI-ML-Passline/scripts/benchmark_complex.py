@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "student_ml_plugin" / "plugin_rf_frozen.py"
 ABI_RUNTIME = ROOT / "abi_runtime" / "eeg_qc_abi.py"
 PARAMS_PATH = ROOT / "student_ml_plugin" / "params.json"
-NAME="RF+FROZEN"
+NAME=PLUGIN.stem
 sys.path.insert(0, str(PLUGIN.parent))
 import plugin  # noqa: E402
 

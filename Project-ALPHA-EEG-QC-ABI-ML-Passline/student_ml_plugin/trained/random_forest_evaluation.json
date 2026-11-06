@@ -1,7 +1,7 @@
 {
   "model": "random_forest",
   "model_family": "RandomForestClassifier",
-  "model_version": "trimodal_eeg_qc_v1",
+  "model_version": "trimodel_eeg_qc_v1",
   "feature_manifest": "student_ml_plugin\\feature_manifest.json",
   "model_manifest": "student_ml_plugin\\model_manifest.json",
   "params": "student_ml_plugin\\params.json",

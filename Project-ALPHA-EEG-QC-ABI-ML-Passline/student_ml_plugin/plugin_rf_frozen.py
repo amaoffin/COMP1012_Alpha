@@ -1,5 +1,4 @@
-#integrated random forest; thinking of adding SVM - wont hit full integration benchmark accuracy :(
-#consider bimodel approach
+#integrated random forest
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -233,27 +232,34 @@ def _predict_reasons(summary: Mapping[str, float], status: str,) -> list[str]:
     return reasons if reasons else ["NONE"]
 
 def qc_decision_v1(window: Mapping[str, Any], params: Mapping[str, Any]) -> Mapping[str, Any]:
+    #gets summary of the eeg window using the _summary functions
     summary = _summary(window, params)
+    
+    #prelim checking to make sure it isnt empty
     if summary["sample_count_total"] <= 0 or summary["non_empty_channel_count"] <= 0:
         return {"status": "ABSTAIN", "quality_score": 0.0, "reason_codes": ["EMPTY_WINDOW"]}
 
-    frozen_status, frozen_conf, frozen_probs, frozen_features = _frozen_predict(summary, params)
+    #predicts status of eeg window with frozen and RF model
+    frozen_status, frozen_conf, frozen_probs = _frozen_predict(summary, params)
     rf_status, rf_p_artifact, rf_conf = _rf_predict(summary, params)
 
+    #combines predictions into a single dictionary
     predictions = {
         "FROZEN": {"status": frozen_status, "confidence": frozen_conf},
         "RF": {"status": rf_status, "confidence": rf_conf, "p_artifact": rf_p_artifact},
     }
 
+    #fuses predictions into a final status with the _fuse function
     final_status = _fuse(predictions)
 
+    #predicts reasons for the final status with the _predict_reasons function
     reasons = _predict_reasons(summary, final_status)
     
-    #approximate ensemble quality score from clean-class probabilities (KEEP for frozen, 1-p_artifact for RF)
+    #approximate ensemble quality score from probabilities (KEEP for frozen, 1-p_artifact for RF), averaged and scaled to 0-100
     clean_scores = [frozen_probs["KEEP"], 1.0 - rf_p_artifact]
     quality_score = round(float(np.mean(clean_scores)) * 100.0, 3)
 
-    #deduplicate reason codes while preserving order
+    #final returns dictionary for the plugin with final status, quality of eeg window, and reasons for status
     return {
         "status": final_status,
         "quality_score": max(0.0, min(100.0, quality_score)),
@@ -262,14 +268,8 @@ def qc_decision_v1(window: Mapping[str, Any], params: Mapping[str, Any]) -> Mapp
 
 
 def feature_extractor_v1(window: Mapping[str, Any], params: Mapping[str, Any],) -> Mapping[str, float]:
+    #gets the summary of the EEG window and returns a dictionary of features, defined in the _summary function
     summary = _summary(window, params)
-    model_features = _model_features(summary)
     return {
-        **summary,
-        "ml_range_gate": model_features[0],
-        "ml_range_reject_gate": model_features[1],
-        "ml_flatline_gate": model_features[2],
-        "ml_flatline_reject_gate": model_features[3],
-        "ml_rms_gate": model_features[4],
-        "ml_peak_gate": model_features[5],
+        **summary
     }

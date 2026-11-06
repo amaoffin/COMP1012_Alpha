@@ -75,7 +75,7 @@ def _rf_predict(summary: Mapping[str, float], params: Mapping[str, Any],) -> tup
         raise ValueError(f"RF must use classes 0=clean and 1=artifact; got {classes}")
     p_artifact = float(probs[classes.index(1)])
     warn_t = _float_param(params, "warn_probability", 0.7)
-    reject_t = _float_param(params, "reject_probability", 0.8)
+    reject_t = _float_param(params, "reject_probability", 0.825)
     status = "REJECT" if p_artifact >= reject_t else ("WARN" if p_artifact >= warn_t else "KEEP")
     return status, p_artifact, max(float(probs[classes.index(0)]), p_artifact)
 
